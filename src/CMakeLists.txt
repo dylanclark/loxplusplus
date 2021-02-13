@@ -8,7 +8,9 @@ set(TARGET_NAME lox)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set(_SOURCES main.cpp)
+set(_SOURCES 
+  err.cpp
+  main.cpp)
 
 # Add source to this project's executable.
 add_executable (${TARGET_NAME} ${_SOURCES})
