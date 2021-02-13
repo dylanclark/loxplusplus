@@ -3,7 +3,7 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-set(TARGET_NAME Events)
+set(TARGET_NAME lox)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -13,7 +13,7 @@ set(_SOURCES main.cpp)
 # Add source to this project's executable.
 add_executable (${TARGET_NAME} ${_SOURCES})
 
-target_precompile_headers(${TARGET_NAME} PRIVATE ${APP_INC}/jlox_pch.h)
+target_precompile_headers(${TARGET_NAME} PRIVATE ${APP_INC}/loxpp_pch.h)
 
 target_include_directories(${TARGET_NAME} PRIVATE ${APP_INC})
 

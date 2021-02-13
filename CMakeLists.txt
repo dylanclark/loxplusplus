@@ -3,7 +3,7 @@
 #
 cmake_minimum_required (VERSION 3.16)
 
-project ("jlox")
+project (LoxPlusPlus)
 
 set(APP_INC ${CMAKE_SOURCE_DIR}/src/inc)
 
