@@ -1,0 +1,22 @@
+#pragma once
+
+#include <any>
+#include <array>
+#include <cmath>
+#include <filesystem>
+#include <functional>
+#include <future>
+#include <iostream>
+#include <list>
+#include <map>
+#include <memory>
+#include <mutex>
+#include <optional>
+#include <queue>
+#include <shared_mutex>
+#include <sstream>
+#include <string>
+#include <string_view>
+#include <thread>
+#include <utility>
+#include <vector>
