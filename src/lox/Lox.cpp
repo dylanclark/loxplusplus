@@ -11,12 +11,16 @@ static constexpr auto Prompt{">> "sv};
 } // namespace Literals
 
 class Lox : public ILox {
+  public:
     virtual void RunFile(std::string filePath) override {
         std::ifstream file{filePath};
         if (!file.is_open()) {
             throw Error::UsageException(
                 Error::UsageException::Type::CanNotOpenFile);
         }
+        std::stringstream buf;
+        buf << file.rdbuf();
+        Run(buf.str());
     }
     virtual void RunPrompt() override {
 
@@ -24,10 +28,13 @@ class Lox : public ILox {
         std::cout << Literals::Prompt;
 
         while (std::getline(std::cin, input)) {
-            std::cout << input << std::endl;
+            Run(input);
             std::cout << Literals::Prompt;
         }
     }
+
+  private:
+    void Run(std::string source) {}
 };
 
 ILox &GetLox() {
