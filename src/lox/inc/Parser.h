@@ -17,7 +17,7 @@ class Parser {
     Expressions::ExprVariant Equality();
     Expressions::ExprVariant Comparison();
 
-    bool Match(int ct, Lexer::TokenType types...);
+    bool Match(std::initializer_list<Lexer::TokenType> types);
     bool Check(Lexer::TokenType type);
     bool IsAtEnd() const;
 

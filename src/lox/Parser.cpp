@@ -2,8 +2,6 @@
 
 #include <Parser.h>
 
-#include <cstdarg>
-
 namespace Loxpp::Parser {
 
 using namespace Expressions;
@@ -16,7 +14,7 @@ ExprVariant Parser::Expression() { return Equality(); }
 ExprVariant Parser::Equality() {
     ExprVariant expr{Comparison()};
 
-    while (Match(2, TokenType::BANG_EQUAL, TokenType::EQUAL_EQUAL)) {
+    while (Match({TokenType::BANG_EQUAL, TokenType::EQUAL_EQUAL})) {
         const TokenPtr& op{Previous()};
         ExprVariant right{Comparison()};
         expr = MakeBinaryExpr(std::move(expr), std::make_unique<Token>(*op),
@@ -30,20 +28,13 @@ ExprVariant Parser::Comparison() { return Equality(); }
 
 // Check to see if current token has any of the given types
 // TODO: initializer list
-bool Parser::Match(int ct, TokenType types...) {
-    va_list(args);
-    va_start(args, types);
-
-    for (int i = 0; i < ct; i++) {
-        TokenType type{va_arg(args, TokenType)};
-        if (Check(type)) {
+bool Parser::Match(std::initializer_list<TokenType> types) {
+    for (const auto& tokenType : types) {
+        if (Check(tokenType)) {
             Advance();
             return true;
         }
     }
-
-    va_end(args);
-
     return false;
 }
 
