@@ -1,5 +1,6 @@
 #include <loxpp_pch.h>
 
+#include <Error.h>
 #include <Scanner.h>
 
 namespace Loxpp::Lexer {
@@ -8,14 +9,14 @@ namespace Loxpp::Lexer {
 
 Scanner::Scanner(std::string source) : m_source(source) {}
 
-const std::vector<Token>& Scanner::ScanTokens() {
+const std::vector<std::unique_ptr<Token>>& Scanner::ScanTokens() {
     while (!IsAtEnd()) {
         // Beginning of next lexeme
         m_start = m_current;
         ScanToken();
     }
 
-    m_tokens.push_back(Token(TokenType::END, "", "", m_line));
+    m_tokens.push_back(std::make_unique<Token>(TokenType::END, "", "", m_line));
     return m_tokens;
 }
 
@@ -58,6 +59,38 @@ void Scanner::ScanToken() {
     case '*':
         AddToken(TokenType::STAR);
         break;
+    case '!':
+        AddToken(TryMatch('=') ? TokenType::BANG_EQUAL : TokenType::BANG);
+        break;
+    case '=':
+        AddToken(TryMatch('=') ? TokenType::EQUAL_EQUAL : TokenType::EQUAL);
+        break;
+    case '<':
+        AddToken(TryMatch('=') ? TokenType::LESS_EQUAL : TokenType::LESS);
+        break;
+    case '>':
+        AddToken(TryMatch('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER);
+        break;
+    case '/':
+        if (TryMatch('/')) {
+            // Comment goes to EOL, skip them
+            while (Peek() != '\n' && !IsAtEnd()) {
+                Advance();
+            }
+        } else {
+            AddToken(TokenType::SLASH);
+        }
+        break;
+    case ' ':
+    case '\r':
+    case '\t':
+        // Ignore whitespace
+        break;
+    case '\n':
+        m_line++;
+        break;
+    default:
+        throw Error::SyntaxError(m_line, "", "Unexpected character.");
     }
 }
 
@@ -70,7 +103,30 @@ char Scanner::Advance() {
 
 void Scanner::AddToken(TokenType type, std::optional<std::string> literal) {
     std::string text{m_source.substr(m_start, m_current)};
-    m_tokens.push_back(Token(type, text, literal, m_line));
+    m_tokens.push_back(std::make_unique<Token>(type, text, literal, m_line));
+}
+
+bool Scanner::TryMatch(char expected) {
+    // EOL
+    if (IsAtEnd()) {
+        return false;
+    }
+
+    // No Match
+    if (m_source[static_cast<size_t>(m_current)] != expected) {
+        return false;
+    }
+
+    // Consume next char, it matched!
+    m_current++;
+    return true;
+}
+
+char Scanner::Peek() const {
+    if (IsAtEnd()) {
+        return '\0';
+    }
+    return m_source[m_current];
 }
 
 #pragma endregion

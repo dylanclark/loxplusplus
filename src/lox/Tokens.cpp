@@ -12,7 +12,7 @@ Token::Token(TokenType type, std::string lexeme,
 std::string Token::ToString() const {
     std::ostringstream stream;
     const std::string literalStr{m_literal.has_value() ? *m_literal : "[null]"};
-    stream << ToString(m_type) << " " << m_lexeme << " " << literalStr;
+    stream << ToString(m_type) << " " << m_lexeme << " " << literalStr << " ";
     return stream.str();
 }
 

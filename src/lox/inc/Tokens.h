@@ -60,6 +60,12 @@ class Token {
     Token(TokenType type, std::string lexeme,
           std::optional<std::string> literal, int line);
 
+    ~Token() = default;
+    Token(const Token&) = delete;
+    Token& operator=(const Token&) = delete;
+    Token(Token&& other) = delete;
+    Token& operator=(Token&& other) = delete;
+
     std::string ToString() const;
 
   private:
