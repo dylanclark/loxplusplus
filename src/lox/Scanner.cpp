@@ -150,7 +150,9 @@ void Scanner::AddStringToken() {
     const int startIndex{m_start + 1};
     const int endIndex{m_current - 1};
     const int len{endIndex - startIndex};
+
     std::string stringValue{m_source.substr(startIndex, len)};
+
     AddToken(TokenType::STRING, stringValue);
 }
 

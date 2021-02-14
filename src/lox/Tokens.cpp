@@ -3,16 +3,33 @@
 
 namespace Loxpp::Lexer {
 
+namespace Literals {
+constexpr auto Space{" "};
+constexpr auto TokenName{"Token"};
+constexpr auto Colon{":"};
+constexpr auto OpenBracket{"{"};
+constexpr auto CloseBracket{"}"};
+constexpr auto Type{"Type"};
+constexpr auto Lex{"Lex"};
+constexpr auto Literal{"Literal"};
+} // namespace Literals
 #pragma region Public methods
 
 Token::Token(TokenType type, std::string lexeme,
              std::optional<std::string> literal, int line)
     : m_type(type), m_lexeme(lexeme), m_literal(literal), m_line(line) {}
 
+// impl << instead
 std::string Token::ToString() const {
+    using namespace Literals;
     std::ostringstream stream;
-    const std::string literalStr{m_literal.has_value() ? *m_literal : "[null]"};
-    stream << ToString(m_type) << " " << m_lexeme << " " << literalStr << " ";
+    stream << TokenName << Space << OpenBracket << Space << Type << Colon
+           << Space << ToString(m_type) << Space << Lex << Colon << Space
+           << m_lexeme << Space;
+    if (m_literal.has_value()) {
+        stream << Literal << Colon << Space << m_literal.value() << Space;
+    }
+    stream << CloseBracket << std::endl;
     return stream.str();
 }
 
