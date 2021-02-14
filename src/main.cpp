@@ -4,7 +4,7 @@
 
 using namespace Loxpp;
 
-int main(int argc, char **argv) noexcept {
+int main(int argc, char** argv) noexcept {
     try {
         if (argc > 2) {
             std::cout << "Usage: jlox [script]" << std::endl;
@@ -14,8 +14,10 @@ int main(int argc, char **argv) noexcept {
         } else {
             GetLox().RunPrompt();
         }
+
         return 0;
-    } catch (const std::exception &e) {
+    } catch (const std::exception& e) {
         std::cout << e.what();
+        return -1;
     }
 }

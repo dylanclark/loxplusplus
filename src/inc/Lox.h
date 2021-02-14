@@ -1,6 +1,9 @@
 #pragma once
 
+#include <Error.h>
+
 #include <string>
+#include <vector>
 
 namespace Loxpp {
 
@@ -9,6 +12,6 @@ struct ILox {
     virtual void RunPrompt() = 0;
 };
 
-ILox &GetLox();
+ILox& GetLox();
 
 } // namespace Loxpp

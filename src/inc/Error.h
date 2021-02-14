@@ -2,6 +2,7 @@
 
 #include <array>
 #include <exception>
+#include <sstream>
 #include <string>
 
 namespace Loxpp::Error {
@@ -17,15 +18,27 @@ class UsageException : public std::exception {
 
     UsageException(Type type);
 
-    virtual const char *what() const noexcept override;
+    virtual const char* what() const noexcept override;
 
   private:
-    static std::string buildMessage(Type);
+    static std::string BuildMessage(Type);
 
-    static constexpr std::array<const char *, static_cast<size_t>(Type::_Max)>
+    static constexpr std::array<const char*, static_cast<size_t>(Type::_Max)>
         m_whatStrings{{"Can not open file specificed"}};
 
     const Type m_type;
+    std::string m_message;
+};
+
+class SyntaxError : public std::exception {
+  public:
+    SyntaxError(int line, std::string where, std::string message);
+
+    virtual const char* what() const noexcept override;
+
+  private:
+    static std::string BuildMessage(int line, std::string where,
+                                    std::string message);
     std::string m_message;
 };
 
