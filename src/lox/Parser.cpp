@@ -11,23 +11,25 @@ using namespace Lexer;
 
 Parser::Parser(std::vector<TokenPtr>&& tokens) : m_tokens(std::move(tokens)) {}
 
-ExprPtr Parser::Expression() { return Equality(); }
+ExprVariant Parser::Expression() { return Equality(); }
 
-ExprPtr Parser::Equality() {
-    ExprPtr expr{Comparison()};
+ExprVariant Parser::Equality() {
+    ExprVariant expr{Comparison()};
 
-    // while (Match(2, TokenType::BANG_EQUAL, TokenType::EQUAL_EQUAL)) {
-    //     const TokenPtr& op{Previous()};
-    //     ExprPtr right{Comparison()};
-    //     expr = std::make_unique<BinaryExpr>(expr, op, right);
-    // }
+    while (Match(2, TokenType::BANG_EQUAL, TokenType::EQUAL_EQUAL)) {
+        const TokenPtr& op{Previous()};
+        ExprVariant right{Comparison()};
+        expr = MakeBinaryExpr(std::move(expr), std::make_unique<Token>(*op),
+                              std::move(right));
+    }
 
     return expr;
 }
 
-ExprPtr Parser::Comparison() { return nullptr; }
+ExprVariant Parser::Comparison() { return Equality(); }
 
 // Check to see if current token has any of the given types
+// TODO: initializer list
 bool Parser::Match(int ct, TokenType types...) {
     va_list(args);
     va_start(args, types);

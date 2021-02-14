@@ -17,9 +17,15 @@ constexpr auto Tab{"\t"};
 } // namespace Literals
 #pragma region Public methods
 
+// Constructor
 Token::Token(TokenType type, std::string lexeme,
              std::optional<LiteralValue> literal, int line)
     : m_type(type), m_lexeme(lexeme), m_literal(literal), m_line(line) {}
+
+// Copy constructor
+Token::Token(const Token& other)
+    : m_type(other.GetType()), m_lexeme(other.GetLexeme()),
+      m_literal(other.GetLiteral()), m_line(other.GetLine()) {}
 
 std::ostream& operator<<(std::ostream& stream, const Token& token) {
     using namespace Literals;

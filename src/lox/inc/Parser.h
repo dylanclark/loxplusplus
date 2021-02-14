@@ -13,9 +13,9 @@ class Parser {
     Parser(std::vector<Lexer::TokenPtr>&& tokens);
 
   private:
-    Expressions::ExprPtr Expression();
-    Expressions::ExprPtr Equality();
-    Expressions::ExprPtr Comparison();
+    Expressions::ExprVariant Expression();
+    Expressions::ExprVariant Equality();
+    Expressions::ExprVariant Comparison();
 
     bool Match(int ct, Lexer::TokenType types...);
     bool Check(Lexer::TokenType type);

@@ -65,10 +65,17 @@ std::string ToString(TokenType type);
 
 using LiteralValue = std::variant<std::string, double>;
 
-class Token : public Uncopyable {
+class Token {
   public:
     Token(TokenType type, std::string lexeme,
           std::optional<LiteralValue> literal, int line);
+    virtual ~Token() = default;
+    // We impl copy constr
+    Token(const Token&);
+    // Delete other constrs
+    auto operator=(const Token&) -> Token& = delete;
+    Token(Token&&) = delete;
+    auto operator=(Token&&) -> Token& = delete;
 
     TokenType GetType() const { return m_type; }
     const std::string& GetLexeme() const { return m_lexeme; }
