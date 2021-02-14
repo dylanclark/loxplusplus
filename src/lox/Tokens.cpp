@@ -1,5 +1,6 @@
-#include <Tokens.h>
 #include <loxpp_pch.h>
+
+#include <Tokens.h>
 
 namespace Loxpp::Lexer {
 
@@ -87,6 +88,32 @@ std::string ToString(TokenType type) {
          {"WHILE"sv},
          {"END"sv}}};
     return std::string{strings[static_cast<size_t>(type)]};
+}
+
+const std::unordered_map<std::string, TokenType>& GetReservedKeywords() {
+
+    static const std::unordered_map<std::string, TokenType>
+        s_reservedKeywordsMap{[]() {
+            std::unordered_map<std::string, TokenType> map{};
+            map.insert({"and", TokenType::AND});
+            map.insert({"class", TokenType::CLASS});
+            map.insert({"else", TokenType::ELSE});
+            map.insert({"for", TokenType::FOR});
+            map.insert({"fun", TokenType::FUN});
+            map.insert({"if", TokenType::IF});
+            map.insert({"nil", TokenType::NIL});
+            map.insert({"or", TokenType::OR});
+            map.insert({"print", TokenType::PRINT});
+            map.insert({"return", TokenType::RETURN});
+            map.insert({"super", TokenType::SUPER});
+            map.insert({"this", TokenType::THIS});
+            map.insert({"true", TokenType::TRUE});
+            map.insert({"var", TokenType::VAR});
+            map.insert({"while", TokenType::WHILE});
+            return map;
+        }()};
+
+    return s_reservedKeywordsMap;
 }
 
 #pragma endregion

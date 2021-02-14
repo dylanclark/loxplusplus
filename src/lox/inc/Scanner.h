@@ -23,17 +23,24 @@ class Scanner {
     const std::vector<std::unique_ptr<Token>>& ScanTokens();
 
   private:
-    bool IsAtEnd() const;
     void ScanToken();
     char Advance();
-    void AddToken(TokenType type,
-                  std::optional<LiteralValue> literal = std::nullopt);
-    bool TryMatch(char expected);
     char Peek() const;
     char PeekNext() const;
-    void AddStringToken();
+
+    bool TryMatch(char expected);
+    bool IsAtEnd() const;
     bool IsDigit(char c);
+    bool IsAlpha(char c);
+    bool IsAlphaNumeric(char c);
+
+    std::string GetCurrentText();
+
+    void AddToken(TokenType type,
+                  std::optional<LiteralValue> literal = std::nullopt);
+    void AddStringToken();
     void AddNumber();
+    void AddIdentifier();
 
     std::string m_source;
     std::vector<std::unique_ptr<Token>> m_tokens;

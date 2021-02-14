@@ -3,6 +3,7 @@
 #include <iostream>
 #include <optional>
 #include <string>
+#include <unordered_map>
 #include <variant>
 
 namespace Loxpp::Lexer {
@@ -57,6 +58,7 @@ enum class TokenType {
     END
 };
 
+const std::unordered_map<std::string, TokenType>& GetReservedKeywords();
 std::string ToString(TokenType type);
 
 using LiteralValue = std::variant<std::string, double>;

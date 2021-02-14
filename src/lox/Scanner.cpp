@@ -98,6 +98,8 @@ void Scanner::ScanToken() {
     default:
         if (IsDigit(c)) {
             AddNumber();
+        } else if (IsAlpha(c)) {
+            AddIdentifier();
         } else {
             throw Error::SyntaxError(m_line, "", "Unexpected character.");
         }
@@ -111,10 +113,14 @@ char Scanner::Advance() {
     return c;
 }
 
-void Scanner::AddToken(TokenType type, std::optional<LiteralValue> literal) {
+std::string Scanner::GetCurrentText() {
     const int len{m_current - m_start};
-    std::string text{m_source.substr(m_start, len)};
-    m_tokens.push_back(std::make_unique<Token>(type, text, literal, m_line));
+    return m_source.substr(m_start, len);
+}
+
+void Scanner::AddToken(TokenType type, std::optional<LiteralValue> literal) {
+    m_tokens.push_back(
+        std::make_unique<Token>(type, GetCurrentText(), literal, m_line));
 }
 
 bool Scanner::TryMatch(char expected) {
@@ -170,10 +176,6 @@ void Scanner::AddStringToken() {
     AddToken(TokenType::STRING, LiteralValue(stringValue));
 }
 
-bool Scanner::IsDigit(char c) {
-    return std::isdigit(static_cast<unsigned char>(c));
-}
-
 void Scanner::AddNumber() {
     while (IsDigit(Peek())) {
         Advance();
@@ -195,5 +197,33 @@ void Scanner::AddNumber() {
     AddToken(TokenType::NUMBER, LiteralValue(value));
 }
 
+void Scanner::AddIdentifier() {
+    // Assume it's an identifier an not a reserved word - 'maximal munch'
+    TokenType type{TokenType::IDENTIFIER};
+
+    while (IsAlphaNumeric(Peek())) {
+        Advance();
+    }
+
+    // Check if it's a reserved word after munching
+    std::string text{GetCurrentText()};
+    const auto& reservedKeywords{GetReservedKeywords()};
+    const auto keyword{reservedKeywords.find(text)};
+    if (keyword != reservedKeywords.end()) {
+        type = keyword->second;
+    }
+
+    AddToken(type);
+}
+
+bool Scanner::IsDigit(char c) {
+    return std::isdigit(static_cast<unsigned char>(c));
+}
+
+bool Scanner::IsAlpha(char c) {
+    return std::isalpha(static_cast<unsigned int>(c));
+}
+
+bool Scanner::IsAlphaNumeric(char c) { return IsAlpha(c) || IsDigit(c); }
 #pragma endregion
 } // namespace Loxpp::Lexer
