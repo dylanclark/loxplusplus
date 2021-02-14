@@ -57,6 +57,8 @@ enum class TokenType {
     END
 };
 
+std::string ToString(TokenType type);
+
 using LiteralValue = std::variant<std::string, double>;
 
 class Token {
@@ -64,16 +66,20 @@ class Token {
     Token(TokenType type, std::string lexeme,
           std::optional<LiteralValue> literal, int line);
 
+    TokenType GetType() const { return m_type; }
+    const std::string& GetLexeme() const { return m_lexeme; }
+    const std::optional<LiteralValue>& GetLiteral() const { return m_literal; }
+    int GetLine() const { return m_line; }
+
     ~Token() = default;
     Token(const Token&) = delete;
     Token& operator=(const Token&) = delete;
     Token(Token&& other) = delete;
     Token& operator=(Token&& other) = delete;
 
-    std::string ToString() const;
+    friend std::ostream& operator<<(std::ostream& os, const Token& token);
 
   private:
-    static std::string ToString(TokenType type);
     const TokenType m_type;
     const std::string m_lexeme;
     const std::optional<LiteralValue> m_literal;

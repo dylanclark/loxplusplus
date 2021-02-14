@@ -55,7 +55,7 @@ void Lox::Run(std::string source) {
     try {
         const std::vector<std::unique_ptr<Token>>& tokens{scanner.ScanTokens()};
         for (const auto& token : tokens) {
-            std::cout << token->ToString() << " ";
+            std::cout << *token;
         }
         std::cout << std::endl;
     } catch (const Error::SyntaxError& e) {
