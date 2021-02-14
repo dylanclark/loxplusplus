@@ -16,7 +16,7 @@ constexpr auto Literal{"Literal"};
 #pragma region Public methods
 
 Token::Token(TokenType type, std::string lexeme,
-             std::optional<std::string> literal, int line)
+             std::optional<LiteralValue> literal, int line)
     : m_type(type), m_lexeme(lexeme), m_literal(literal), m_line(line) {}
 
 // impl << instead
@@ -27,7 +27,10 @@ std::string Token::ToString() const {
            << Space << ToString(m_type) << Space << Lex << Colon << Space
            << m_lexeme << Space;
     if (m_literal.has_value()) {
-        stream << Literal << Colon << Space << m_literal.value() << Space;
+        stream << Literal << Colon << Space;
+        std::visit([&stream](const auto& variant) { stream << variant; },
+                   *m_literal);
+        stream << Space;
     }
     stream << CloseBracket << std::endl;
     return stream.str();

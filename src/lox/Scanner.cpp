@@ -3,6 +3,8 @@
 #include <Error.h>
 #include <Scanner.h>
 
+#include <cctype>
+
 namespace Loxpp::Lexer {
 
 #pragma region Public methods
@@ -16,7 +18,8 @@ const std::vector<std::unique_ptr<Token>>& Scanner::ScanTokens() {
         ScanToken();
     }
 
-    m_tokens.push_back(std::make_unique<Token>(TokenType::END, "", "", m_line));
+    m_tokens.push_back(
+        std::make_unique<Token>(TokenType::END, "", std::nullopt, m_line));
     return m_tokens;
 }
 
@@ -93,7 +96,11 @@ void Scanner::ScanToken() {
         m_line++;
         break;
     default:
-        throw Error::SyntaxError(m_line, "", "Unexpected character.");
+        if (IsDigit(c)) {
+            AddNumber();
+        } else {
+            throw Error::SyntaxError(m_line, "", "Unexpected character.");
+        }
     }
 }
 
@@ -104,7 +111,7 @@ char Scanner::Advance() {
     return c;
 }
 
-void Scanner::AddToken(TokenType type, std::optional<std::string> literal) {
+void Scanner::AddToken(TokenType type, std::optional<LiteralValue> literal) {
     const int len{m_current - m_start};
     std::string text{m_source.substr(m_start, len)};
     m_tokens.push_back(std::make_unique<Token>(type, text, literal, m_line));
@@ -133,6 +140,13 @@ char Scanner::Peek() const {
     return m_source[m_current];
 }
 
+char Scanner::PeekNext() const {
+    if (m_current + 1 >= m_source.length()) {
+        return '\0';
+    }
+    return m_source[m_current + 1];
+}
+
 void Scanner::AddStringToken() {
     while (Peek() != '"' && !IsAtEnd()) {
         if (Peek() == '\n') {
@@ -153,7 +167,32 @@ void Scanner::AddStringToken() {
 
     std::string stringValue{m_source.substr(startIndex, len)};
 
-    AddToken(TokenType::STRING, stringValue);
+    AddToken(TokenType::STRING, LiteralValue(stringValue));
+}
+
+bool Scanner::IsDigit(char c) {
+    return std::isdigit(static_cast<unsigned char>(c));
+}
+
+void Scanner::AddNumber() {
+    while (IsDigit(Peek())) {
+        Advance();
+    }
+
+    if (Peek() == '.' && IsDigit(PeekNext())) {
+        // Consume the '.'
+        Advance();
+
+        while (IsDigit(Peek())) {
+            Advance();
+        }
+    }
+
+    const auto strLen(m_current - m_start);
+    const auto digitStr{m_source.substr(m_start, strLen)};
+    const double value{std::stod(digitStr)};
+
+    AddToken(TokenType::NUMBER, LiteralValue(value));
 }
 
 #pragma endregion

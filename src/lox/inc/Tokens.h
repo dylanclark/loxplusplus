@@ -1,7 +1,9 @@
 #pragma once
 
+#include <iostream>
 #include <optional>
 #include <string>
+#include <variant>
 
 namespace Loxpp::Lexer {
 
@@ -55,10 +57,12 @@ enum class TokenType {
     END
 };
 
+using LiteralValue = std::variant<std::string, double>;
+
 class Token {
   public:
     Token(TokenType type, std::string lexeme,
-          std::optional<std::string> literal, int line);
+          std::optional<LiteralValue> literal, int line);
 
     ~Token() = default;
     Token(const Token&) = delete;
@@ -72,7 +76,7 @@ class Token {
     static std::string ToString(TokenType type);
     const TokenType m_type;
     const std::string m_lexeme;
-    const std::optional<std::string> m_literal;
+    const std::optional<LiteralValue> m_literal;
     const int m_line;
 };
 

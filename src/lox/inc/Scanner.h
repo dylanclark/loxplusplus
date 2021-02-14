@@ -5,6 +5,7 @@
 #include <memory>
 #include <optional>
 #include <string>
+#include <variant>
 #include <vector>
 
 namespace Loxpp::Lexer {
@@ -26,10 +27,13 @@ class Scanner {
     void ScanToken();
     char Advance();
     void AddToken(TokenType type,
-                  std::optional<std::string> literal = std::nullopt);
+                  std::optional<LiteralValue> literal = std::nullopt);
     bool TryMatch(char expected);
     char Peek() const;
+    char PeekNext() const;
     void AddStringToken();
+    bool IsDigit(char c);
+    void AddNumber();
 
     std::string m_source;
     std::vector<std::unique_ptr<Token>> m_tokens;
