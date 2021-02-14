@@ -29,6 +29,7 @@ class Scanner {
                   std::optional<std::string> literal = std::nullopt);
     bool TryMatch(char expected);
     char Peek() const;
+    void AddStringToken();
 
     std::string m_source;
     std::vector<std::unique_ptr<Token>> m_tokens;

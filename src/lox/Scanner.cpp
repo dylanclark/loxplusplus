@@ -81,6 +81,9 @@ void Scanner::ScanToken() {
             AddToken(TokenType::SLASH);
         }
         break;
+    case '"':
+        AddStringToken();
+        break;
     case ' ':
     case '\r':
     case '\t':
@@ -102,7 +105,8 @@ char Scanner::Advance() {
 }
 
 void Scanner::AddToken(TokenType type, std::optional<std::string> literal) {
-    std::string text{m_source.substr(m_start, m_current)};
+    const int len{m_current - m_start};
+    std::string text{m_source.substr(m_start, len)};
     m_tokens.push_back(std::make_unique<Token>(type, text, literal, m_line));
 }
 
@@ -127,6 +131,27 @@ char Scanner::Peek() const {
         return '\0';
     }
     return m_source[m_current];
+}
+
+void Scanner::AddStringToken() {
+    while (Peek() != '"' && !IsAtEnd()) {
+        if (Peek() == '\n') {
+            m_line++;
+        }
+        Advance();
+    }
+    if (IsAtEnd()) {
+        throw Error::SyntaxError(m_line, "", "Unterminated string.");
+    }
+
+    // The closing "
+    Advance();
+
+    const int startIndex{m_start + 1};
+    const int endIndex{m_current - 1};
+    const int len{endIndex - startIndex};
+    std::string stringValue{m_source.substr(startIndex, len)};
+    AddToken(TokenType::STRING, stringValue);
 }
 
 #pragma endregion
