@@ -3,6 +3,7 @@ set(TARGET_NAME lox-core)
 set(SOURCES 
     Error.cpp
     Lox.cpp
+    Parser.cpp
     Scanner.cpp
     Tokens.cpp
 )

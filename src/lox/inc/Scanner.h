@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Tokens.h"
+#include <Uncopyable.h>
 
 #include <memory>
 #include <optional>
@@ -10,15 +11,9 @@
 
 namespace Loxpp::Lexer {
 
-class Scanner {
+class Scanner : public Uncopyable {
   public:
     Scanner(std::string source);
-
-    ~Scanner() = default;
-    Scanner(const Scanner&) = delete;
-    Scanner& operator=(const Scanner&) = delete;
-    Scanner(Scanner&& other) = delete;
-    Scanner& operator=(Scanner&& other) = delete;
 
     const std::vector<std::unique_ptr<Token>>& ScanTokens();
 

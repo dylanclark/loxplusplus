@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Uncopyable.h>
+
 #include <iostream>
 #include <optional>
 #include <string>
@@ -63,7 +65,7 @@ std::string ToString(TokenType type);
 
 using LiteralValue = std::variant<std::string, double>;
 
-class Token {
+class Token : public Uncopyable {
   public:
     Token(TokenType type, std::string lexeme,
           std::optional<LiteralValue> literal, int line);
@@ -73,12 +75,6 @@ class Token {
     const std::optional<LiteralValue>& GetLiteral() const { return m_literal; }
     int GetLine() const { return m_line; }
 
-    ~Token() = default;
-    Token(const Token&) = delete;
-    Token& operator=(const Token&) = delete;
-    Token(Token&& other) = delete;
-    Token& operator=(Token&& other) = delete;
-
     friend std::ostream& operator<<(std::ostream& os, const Token& token);
 
   private:
@@ -87,5 +83,7 @@ class Token {
     const std::optional<LiteralValue> m_literal;
     const int m_line;
 };
+
+using TokenPtr = std::unique_ptr<Lexer::Token>;
 
 } // namespace Loxpp::Lexer
