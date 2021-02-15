@@ -2,6 +2,7 @@
 
 #include "Expr.h"
 #include "Tokens.h"
+#include "_Error.h"
 
 #include <memory>
 #include <vector>

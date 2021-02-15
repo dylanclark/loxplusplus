@@ -1,6 +1,7 @@
 #include <loxpp_pch.h>
 
 #include <Object.h>
+#include <VisitHelpers.h>
 
 namespace Loxpp::Object {
 
@@ -23,6 +24,13 @@ auto variant_cast(const std::variant<Args...>& v)
 
 LoxObj FromLiteralValue(const Lexer::LiteralValue& value) {
     return LoxObj{variant_cast(value)};
+}
+
+bool IsTruthy(const LoxObj& obj) {
+    return std::visit(overloaded{[](std::monostate /*m*/) { return false; },
+                                 [](bool b) { return b; },
+                                 [](auto&& arg) { return true; }},
+                      obj);
 }
 
 } // namespace Loxpp::Object

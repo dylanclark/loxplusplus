@@ -31,17 +31,4 @@ class UsageException : public std::exception {
     std::string m_message;
 };
 
-// Represents a syntax error described by `message` in `where` of line `line`
-class SyntaxError : public std::exception {
-  public:
-    SyntaxError(int line, std::string where, std::string message);
-
-    virtual const char* what() const noexcept override;
-
-  private:
-    static std::string BuildMessage(int line, std::string where,
-                                    std::string message);
-    std::string m_message;
-};
-
 } // namespace Loxpp::Error

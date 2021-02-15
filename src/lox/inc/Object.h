@@ -11,4 +11,5 @@ namespace Loxpp::Object {
 using LoxObj = std::variant<std::monostate, std::string, double, bool>;
 
 LoxObj FromLiteralValue(const Lexer::LiteralValue& value);
+bool IsTruthy(const LoxObj& obj);
 } // namespace Loxpp::Object

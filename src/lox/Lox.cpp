@@ -1,11 +1,12 @@
 #include <loxpp_pch.h>
 
-#include <Error.h>
 #include <Lox.h>
 #include <Parser.h>
 #include <Print.h>
 #include <Scanner.h>
 #include <Tokens.h>
+#include <_Error.h>
+
 
 namespace Loxpp {
 
