@@ -39,7 +39,8 @@ const char* SyntaxError::what() const noexcept { return m_message.c_str(); }
 #pragma endregion
 
 #pragma region Runtime Error
-RuntimeError::RuntimeError(Lexer::TokenPtr& token, const std::string& message)
+RuntimeError::RuntimeError(const Lexer::TokenPtr& token,
+                           const std::string& message)
     : m_token(*token), m_message(message) {}
 
 const char* RuntimeError::what() const noexcept { return m_message.c_str(); }

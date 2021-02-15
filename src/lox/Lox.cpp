@@ -1,12 +1,12 @@
 #include <loxpp_pch.h>
 
+#include <Eval.h>
 #include <Lox.h>
 #include <Parser.h>
 #include <Print.h>
 #include <Scanner.h>
 #include <Tokens.h>
 #include <_Error.h>
-
 
 namespace Loxpp {
 
@@ -64,7 +64,11 @@ void Lox::Run(std::string&& source) {
         Parser::Parser parser{std::move(tokens)};
         Expressions::Expr expr{parser.Parse()};
 
-        std::cout << expr << std::endl;
+        std::cout << "AST:\n" << expr << std::endl;
+
+        Expressions::Evaluator interpreter{};
+        interpreter.Evaluate(expr);
+
     } catch (const Error::SyntaxError& e) {
         m_hadError = true;
         std::cout << e.what() << std::endl;

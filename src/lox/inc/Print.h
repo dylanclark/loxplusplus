@@ -1,4 +1,5 @@
 #include <Expr.h>
+#include <Object.h>
 #include <Tokens.h>
 
 #include <iostream>
@@ -15,3 +16,7 @@ std::ostream& operator<<(std::ostream& stream,
 // << LiteralValue
 std::ostream& operator<<(std::ostream& stream,
                          const Loxpp::Lexer::LiteralValue& value);
+
+// << LoxObj
+// std::ostream& operator<<(std::ostream& stream,
+//                         const Loxpp::Object::LoxObj& obj);

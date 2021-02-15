@@ -82,3 +82,15 @@ std::ostream& operator<<(std::ostream& stream,
                value);
     return stream;
 }
+
+// std::ostream& operator<<(std::ostream& stream,
+//                         const Loxpp::Object::LoxObj& obj) {
+//    std::visit(overloaded{
+//                   [&stream](const std::string& s) { stream << s; },
+//                   [&stream](double d) { stream << d; },
+//                   [&stream](bool b) { stream << b; },
+//                   [&stream](std::monostate) { stream << "[null]"; },
+//               },
+//               obj);
+//    return stream;
+//}

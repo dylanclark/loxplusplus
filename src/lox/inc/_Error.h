@@ -27,7 +27,7 @@ class SyntaxError : public std::exception {
 class RuntimeError : public std::exception {
 
   public:
-    RuntimeError(Lexer::TokenPtr& token, const std::string& message);
+    RuntimeError(const Lexer::TokenPtr& token, const std::string& message);
 
     virtual const char* what() const noexcept override;
 
