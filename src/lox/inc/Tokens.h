@@ -67,8 +67,8 @@ std::string ToString(TokenType type);
 const std::unordered_map<std::string, TokenType>& GetReservedKeywords();
 
 // Variant type is a union of our supported literals: string, double, bool, and
-// null
-using LiteralValue = std::variant<std::string, double, bool, std::monostate>;
+// null. Null is represented by std::monostate`
+using LiteralValue = std::variant<std::monostate, std::string, double, bool>;
 
 // A token represents a valid part of the Loxpp alphabet
 // It has a type, a lexeme (i.e. the textual representation of the token in src

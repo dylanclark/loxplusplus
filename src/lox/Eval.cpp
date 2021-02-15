@@ -28,7 +28,11 @@ LoxObj Evaluator::Eval(const Expr& expr) {
 
 LoxObj Evaluator::Eval(const BinaryExprPtr& expr) { return LoxObj{}; }
 LoxObj Evaluator::Eval(const GroupingExprPtr& expr) { return LoxObj{}; }
-LoxObj Evaluator::Eval(const LiteralExprPtr& expr) { return LoxObj{}; }
+
+LoxObj Evaluator::Eval(const LiteralExprPtr& expr) {
+    return FromLiteralValue(expr->value);
+}
+
 LoxObj Evaluator::Eval(const UnaryExprPtr& expr) { return LoxObj{}; }
 
 } // namespace Loxpp::Expressions
