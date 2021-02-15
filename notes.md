@@ -2,12 +2,12 @@
 
 (TODO: Come through and clean this up. Hope to organize and make it helpful. For now it's just a running list of notes to self as I work through the book)
 
-## Chapter 1
+## Chapter 4
 - Use streams instead of strings for running?
 - Java and C++ substr methods are different! start,end in java and start,len in c++!
 - literals are doubles or strings - use variant
 
-## Chapter 2
+## Chapter 5
 
 - The lexical grammar from chapter 1 is a regular language with no semantic meaning
 - In this chapter we're creating a syntactic grammer. The 'alphabet' is the tokens here. 
@@ -46,7 +46,7 @@ operator       → "==" | "!=" | "<" | "<=" | ">" | ">="
 ```
 - skip impl of astprinter, as we need to build the tree first ...
 - 
-## Chapter 3
+## Chapter 6
 
 - We need well-defined precedence nd associativity to avoid amiguity. Without it, `6 / 3 - 1` could evaluate to `(6/3) - 1 = 1` or `6 / (3 - 1) = 3`.
 - Same precedence rules as C:
@@ -76,3 +76,9 @@ primary        → NUMBER | STRING | "true" | "false" | "nil"
 - Parsing technique of choise is "recursive descent". It is a top-down parsing technique that literally translates the grammar's rules into imperitive code. Each rule is a function.
 - notes on variant impl and codegen
 - overloadeding << for types for printing 
+
+## Chapter 7
+
+- Visitor pattern for matching types and recursively evaluating
+- functional approach to binary ops
+- opportunity to templatize it and make it even smaller
