@@ -2,6 +2,7 @@ set(TARGET_NAME lox-core)
 
 set(SOURCES 
     Error.cpp
+    Eval.cpp
     Lox.cpp
     Parser.cpp
     Print.cpp

@@ -5,7 +5,7 @@
 #include <memory>
 #include <type_traits>
 #include <variant>
-
+// TODO: better namespace
 namespace Loxpp::Parser::Expressions {
 
 /* Define the types of nodes in the AST and the fields associated with each

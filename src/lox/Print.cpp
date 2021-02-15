@@ -3,6 +3,7 @@
 #include <Expr.h>
 #include <Print.h>
 #include <Tokens.h>
+#include <VisitHelpers.h>
 
 using namespace Loxpp;
 using namespace Loxpp::Lexer;
