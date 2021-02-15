@@ -27,7 +27,7 @@ class Lox : public ILox {
     virtual void RunPrompt() override;
 
   private:
-    void Run(std::string source);
+    void Run(std::string&& source);
     void Error(int line, std::string message);
 
     bool m_hadError{false};
@@ -41,7 +41,7 @@ void Lox::RunFile(std::string filePath) {
     }
     std::stringstream buf;
     buf << file.rdbuf();
-    Run(buf.str());
+    Run(std::move(buf.str()));
 }
 
 void Lox::RunPrompt() {
@@ -50,19 +50,19 @@ void Lox::RunPrompt() {
     std::cout << Literals::Prompt;
 
     while (std::getline(std::cin, input)) {
-        Run(input);
+        Run(std::move(input));
         m_hadError = false;
         std::cout << Literals::Prompt;
     }
 }
 
-void Lox::Run(std::string source) {
-    Scanner scanner{source};
+void Lox::Run(std::string&& source) {
+    Scanner scanner{std::move(source)};
     try {
         std::vector<std::unique_ptr<Token>> tokens{scanner.ScanTokens()};
-
         Parser::Parser parser{std::move(tokens)};
         Parser::Expressions::Expr expr{parser.Parse()};
+
         std::cout << expr << std::endl;
     } catch (const Error::SyntaxError& e) {
         m_hadError = true;

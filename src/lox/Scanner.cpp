@@ -11,7 +11,7 @@ namespace Loxpp::Lexer {
 
 // Scanner implementation: Responsible for scanning source code and converting
 // it to a flat list of tokens where each token is part of the lexical alphabet
-Scanner::Scanner(std::string source) : m_source(source) {}
+Scanner::Scanner(std::string&& source) : m_source(std::move(source)) {}
 
 std::vector<std::unique_ptr<Token>> Scanner::ScanTokens() {
     while (!IsAtEnd()) {
@@ -22,8 +22,10 @@ std::vector<std::unique_ptr<Token>> Scanner::ScanTokens() {
 
     m_tokens.push_back(
         std::make_unique<Token>(TokenType::END, "", std::nullopt, m_line));
-    // todo:
-    return std::move(m_tokens);
+
+    std::vector<TokenPtr> tokens{std::move(m_tokens)};
+    Reset();
+    return tokens;
 }
 
 #pragma endregion
@@ -229,5 +231,11 @@ bool Scanner::IsAlpha(char c) {
 
 bool Scanner::IsAlphaNumeric(char c) { return IsAlpha(c) || IsDigit(c); }
 
+void Scanner::Reset() {
+    m_tokens.clear();
+    m_start = 0;
+    m_current = 0;
+    m_line = 1;
+}
 #pragma endregion
 } // namespace Loxpp::Lexer

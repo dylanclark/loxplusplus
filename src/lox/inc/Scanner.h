@@ -14,7 +14,7 @@ namespace Loxpp::Lexer {
 // Scanner class transforms a source string into a flat sequence of Tokens
 class Scanner : public Uncopyable {
   public:
-    Scanner(std::string source);
+    Scanner(std::string&& source);
 
     std::vector<std::unique_ptr<Token>> ScanTokens();
 
@@ -37,6 +37,10 @@ class Scanner : public Uncopyable {
     void AddStringToken();
     void AddNumber();
     void AddIdentifier();
+
+    // Reset vec and indices. Gets back to valid state where ScanTokens() can be
+    // called agian on the same source
+    void Reset();
 
     std::string m_source;
     std::vector<std::unique_ptr<Token>> m_tokens;
