@@ -2,6 +2,7 @@
 
 #include <Error.h>
 #include <Lox.h>
+#include <Parser.h>
 #include <Scanner.h>
 #include <Tokens.h>
 
@@ -62,6 +63,9 @@ void Lox::Run(std::string source) {
         m_hadError = true;
         std::cout << e.what() << std::endl;
     }
+
+    Parser::Parser parser{std::move(tokens)};
+    Parser::Expressions::ExprVariant expr{parser.Parse()};
 }
 
 void Lox::Error(int /*line*/, std::string /*message*/) { m_hadError = true; }

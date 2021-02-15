@@ -11,11 +11,16 @@ namespace Loxpp::Parser {
 class Parser {
   public:
     Parser(std::vector<Lexer::TokenPtr>&& tokens);
+    Expressions::ExprVariant Parse();
 
   private:
     Expressions::ExprVariant Expression();
     Expressions::ExprVariant Equality();
     Expressions::ExprVariant Comparison();
+    Expressions::ExprVariant Term();
+    Expressions::ExprVariant Factor();
+    Expressions::ExprVariant Unary();
+    Expressions::ExprVariant Primary();
 
     bool Match(std::initializer_list<Lexer::TokenType> types);
     bool Check(Lexer::TokenType type);
@@ -24,6 +29,10 @@ class Parser {
     const Lexer::TokenPtr& Advance();
     const Lexer::TokenPtr& Peek() const;
     const Lexer::TokenPtr& Previous();
+    const Lexer::TokenPtr& Consume(Lexer::TokenType type, std::string message);
+
+    Error::SyntaxError Error(const Lexer::TokenPtr& token, std::string message);
+    void Synchronize();
 
     std::vector<Lexer::TokenPtr> m_tokens;
     int m_current{0};

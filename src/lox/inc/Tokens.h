@@ -63,7 +63,7 @@ enum class TokenType {
 const std::unordered_map<std::string, TokenType>& GetReservedKeywords();
 std::string ToString(TokenType type);
 
-using LiteralValue = std::variant<std::string, double>;
+using LiteralValue = std::variant<std::string, double, bool, std::nullptr_t>;
 
 class Token {
   public:
