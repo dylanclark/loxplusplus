@@ -62,7 +62,7 @@ void Lox::Run(std::string source) {
         std::vector<std::unique_ptr<Token>> tokens{scanner.ScanTokens()};
 
         Parser::Parser parser{std::move(tokens)};
-        Parser::Expressions::ExprVariant expr{parser.Parse()};
+        Parser::Expressions::Expr expr{parser.Parse()};
         std::cout << expr << std::endl;
     } catch (const Error::SyntaxError& e) {
         m_hadError = true;

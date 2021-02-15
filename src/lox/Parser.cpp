@@ -25,7 +25,7 @@ primary        → NUMBER | STRING | "true" | "false" | "nil"
 */
 Parser::Parser(std::vector<TokenPtr>&& tokens) : m_tokens(std::move(tokens)) {}
 
-ExprVariant Parser::Parse() {
+Expr Parser::Parse() {
     try {
         return Expression();
     } catch (const Error::SyntaxError& e) {
@@ -34,15 +34,15 @@ ExprVariant Parser::Parse() {
 }
 
 // expression -> equality
-ExprVariant Parser::Expression() { return Equality(); }
+Expr Parser::Expression() { return Equality(); }
 
 // equality -> comparison ( ( "!=" | "== ") comparison)*
-ExprVariant Parser::Equality() {
-    ExprVariant expr{Comparison()};
+Expr Parser::Equality() {
+    Expr expr{Comparison()};
 
     while (Match({TokenType::BANG_EQUAL, TokenType::EQUAL_EQUAL})) {
         const TokenPtr& op{Previous()};
-        ExprVariant right{Comparison()};
+        Expr right{Comparison()};
         expr = MakeBinaryExpr(std::move(expr), std::make_unique<Token>(*op),
                               std::move(right));
     }
@@ -51,13 +51,13 @@ ExprVariant Parser::Equality() {
 }
 
 // comparison -> term ( ( ">" | ">=" | "<" | "<=" ) term )*
-ExprVariant Parser::Comparison() {
-    ExprVariant expr{Term()};
+Expr Parser::Comparison() {
+    Expr expr{Term()};
 
     while (Match({TokenType::GREATER, TokenType::GREATER_EQUAL, TokenType::LESS,
                   TokenType::LESS_EQUAL})) {
         const TokenPtr& op{Previous()};
-        ExprVariant right{Term()};
+        Expr right{Term()};
         expr = MakeBinaryExpr(std::move(expr), std::make_unique<Token>(*op),
                               std::move(right));
     }
@@ -66,12 +66,12 @@ ExprVariant Parser::Comparison() {
 }
 
 // term           → factor ( ( "-" | "+" ) factor )* ;
-ExprVariant Parser::Term() {
-    ExprVariant expr{Factor()};
+Expr Parser::Term() {
+    Expr expr{Factor()};
 
     while (Match({TokenType::MINUS, TokenType::PLUS})) {
         const TokenPtr& op{Previous()};
-        ExprVariant right{Factor()};
+        Expr right{Factor()};
         expr = MakeBinaryExpr(std::move(expr), std::make_unique<Token>(*op),
                               std::move(right));
     }
@@ -80,12 +80,12 @@ ExprVariant Parser::Term() {
 }
 
 // factor         → unary ( ( "/" | "*" ) unary )* ;
-ExprVariant Parser::Factor() {
-    ExprVariant expr{Unary()};
+Expr Parser::Factor() {
+    Expr expr{Unary()};
 
     while (Match({TokenType::SLASH, TokenType::STAR})) {
         const TokenPtr& op{Previous()};
-        ExprVariant right{Unary()};
+        Expr right{Unary()};
         expr = MakeBinaryExpr(std::move(expr), std::make_unique<Token>(*op),
                               std::move(right));
     }
@@ -94,17 +94,17 @@ ExprVariant Parser::Factor() {
 }
 
 // unary          → ( "!" | "-" ) unary | primary
-ExprVariant Parser::Unary() {
+Expr Parser::Unary() {
     if (Match({TokenType::BANG, TokenType::MINUS})) {
         const TokenPtr& op{Previous()};
-        ExprVariant right{Unary()};
+        Expr right{Unary()};
         return MakeUnaryExpr(std::make_unique<Token>(*op), std::move(right));
     }
     return Primary();
 }
 
 // primary    → NUMBER | STRING | "true" | "false" | "nil" | "(" expression")" ;
-ExprVariant Parser::Primary() {
+Expr Parser::Primary() {
     if (Match({TokenType::FALSE})) {
         return MakeLiteralExpr(false);
     }
@@ -119,7 +119,7 @@ ExprVariant Parser::Primary() {
         return MakeLiteralExpr(std::move(val));
     }
     if (Match({TokenType::LEFT_PAREN})) {
-        ExprVariant expr{Expression()};
+        Expr expr{Expression()};
         Consume(TokenType::RIGHT_PAREN, "Expect ')' after expression.");
         return MakeGroupingExpr(std::move(expr));
     }

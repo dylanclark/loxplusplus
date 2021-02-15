@@ -11,7 +11,7 @@ namespace Loxpp::Parser::Expressions {
 /* Define the types of nodes in the AST and the fields associated with each
 node. Defining a name and it's types results in creation of a POD struct that
 consumes its arguments and a factory function to make an instance of the
-ExprVariant type. Example follows:
+Expr type. Example follows:
 
 DefineExprOneField(ExampleExpression, string, foo) ->
 
@@ -20,7 +20,7 @@ struct ExampleExpression {
     ExampleExpression(string foo) : foo(std::move(foo)) {}
 };
 
-intline ExprVariant MakeExampleExpression(string&& foo) {
+intline Expr MakeExampleExpression(string&& foo) {
     return std::make_unique<ExampleExpression>(std::move(foo));
 }
 */
@@ -29,7 +29,7 @@ intline ExprVariant MakeExampleExpression(string&& foo) {
         FIELD1_TYPE FIELD1_NAME;                                               \
         NAME(FIELD1_TYPE FIELD1_NAME) : FIELD1_NAME(std::move(FIELD1_NAME)) {} \
     };                                                                         \
-    inline ExprVariant Make##NAME(FIELD1_TYPE&& FIELD1_NAME) {                 \
+    inline Expr Make##NAME(FIELD1_TYPE&& FIELD1_NAME) {                        \
         return std::make_unique<NAME>(std::move(FIELD1_NAME));                 \
     }
 
@@ -42,8 +42,8 @@ intline ExprVariant MakeExampleExpression(string&& foo) {
             : FIELD1_NAME(std::move(FIELD1_NAME)),                             \
               FIELD2_NAME(std::move(FIELD2_NAME)) {}                           \
     };                                                                         \
-    inline ExprVariant Make##NAME(FIELD1_TYPE&& FIELD1_NAME,                   \
-                                  FIELD2_TYPE&& FIELD2_NAME) {                 \
+    inline Expr Make##NAME(FIELD1_TYPE&& FIELD1_NAME,                          \
+                           FIELD2_TYPE&& FIELD2_NAME) {                        \
         return std::make_unique<NAME>(std::move(FIELD1_NAME),                  \
                                       std::move(FIELD2_NAME));                 \
     }
@@ -60,9 +60,9 @@ intline ExprVariant MakeExampleExpression(string&& foo) {
               FIELD2_NAME(std::move(FIELD2_NAME)),                             \
               FIELD3_NAME(std::move(FIELD3_NAME)) {}                           \
     };                                                                         \
-    inline ExprVariant Make##NAME(FIELD1_TYPE&& FIELD1_NAME,                   \
-                                  FIELD2_TYPE&& FIELD2_NAME,                   \
-                                  FIELD3_TYPE&& FIELD3_NAME) {                 \
+    inline Expr Make##NAME(FIELD1_TYPE&& FIELD1_NAME,                          \
+                           FIELD2_TYPE&& FIELD2_NAME,                          \
+                           FIELD3_TYPE&& FIELD3_NAME) {                        \
         return std::make_unique<NAME>(std::move(FIELD1_NAME),                  \
                                       std::move(FIELD2_NAME),                  \
                                       std::move(FIELD3_NAME));                 \
@@ -81,22 +81,21 @@ using LiteralExprPtr = std::unique_ptr<LiteralExpr>;
 using UnaryExprPtr = std::unique_ptr<UnaryExpr>;
 
 // Main expression
-using ExprVariant =
+using Expr =
     std::variant<BinaryExprPtr, GroupingExprPtr, LiteralExprPtr, UnaryExprPtr>;
 
 /* Define the structs */
 
 // BinaryExpr : ExprPtr left, Token op, ExprPtr right
-DefineExprThreeFields(BinaryExpr, ExprVariant, left, Lexer::TokenPtr, op,
-                      ExprVariant, right);
+DefineExprThreeFields(BinaryExpr, Expr, left, Lexer::TokenPtr, op, Expr, right);
 
 // GroupingExpr : ExprPtr expression
-DefineExprOneField(GroupingExpr, ExprVariant, expression);
+DefineExprOneField(GroupingExpr, Expr, expression);
 
 // LiteralExpr : LiteralValue value
 DefineExprOneField(LiteralExpr, Lexer::LiteralValue, value);
 
 // UnaryExpr : Token op, ExprPtr right
-DefineExprTwoFields(UnaryExpr, Lexer::TokenPtr, op, ExprVariant, right);
+DefineExprTwoFields(UnaryExpr, Lexer::TokenPtr, op, Expr, right);
 
 } // namespace Loxpp::Parser::Expressions

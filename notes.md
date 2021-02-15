@@ -1,5 +1,6 @@
 # Crafting interpreters notes
 
+(TODO: Come through and clean this up. Hope to organize and make it helpful. For now it's just a running list of notes to self as I work through the book)
 
 ## Chapter 1
 - Use streams instead of strings for running?

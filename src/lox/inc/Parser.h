@@ -13,16 +13,16 @@ namespace Loxpp::Parser {
 class Parser {
   public:
     Parser(std::vector<Lexer::TokenPtr>&& tokens);
-    Expressions::ExprVariant Parse();
+    Expressions::Expr Parse();
 
   private:
-    Expressions::ExprVariant Expression();
-    Expressions::ExprVariant Equality();
-    Expressions::ExprVariant Comparison();
-    Expressions::ExprVariant Term();
-    Expressions::ExprVariant Factor();
-    Expressions::ExprVariant Unary();
-    Expressions::ExprVariant Primary();
+    Expressions::Expr Expression();
+    Expressions::Expr Equality();
+    Expressions::Expr Comparison();
+    Expressions::Expr Term();
+    Expressions::Expr Factor();
+    Expressions::Expr Unary();
+    Expressions::Expr Primary();
 
     bool Match(std::initializer_list<Lexer::TokenType> types);
     bool Check(Lexer::TokenType type);

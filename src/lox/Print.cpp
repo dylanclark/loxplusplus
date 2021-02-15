@@ -22,15 +22,15 @@ constexpr auto Tab{"\t"};
 } // namespace Literals
 
 void Parenthesize(std::ostream& stream, const std::string& name,
-                  const ExprVariant& expr) {
+                  const Expr& expr) {
     stream << "(" << name << " " << expr << ")";
 }
 
 void Parenthesize(std::ostream& stream, const std::string& name,
-                  const ExprVariant& exprOne, const ExprVariant& exprTwo) {
+                  const Expr& exprOne, const Expr& exprTwo) {
     stream << "(" << name << " " << exprOne << " " << exprTwo << ")";
 }
-std::ostream& operator<<(std::ostream& stream, const ExprVariant& expr) {
+std::ostream& operator<<(std::ostream& stream, const Expr& expr) {
     using namespace Lexer;
     std::visit(
         overloaded{// Define << overload for each type of the variant here

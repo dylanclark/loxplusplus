@@ -13,9 +13,9 @@ template <class... Ts> struct overloaded : Ts... {
 };                                                             // (1)
 template <class... Ts> overloaded(Ts...) -> overloaded<Ts...>; // (2)
 
-// << ExprVariant
+// << Expr
 std::ostream& operator<<(std::ostream& stream,
-                         const Loxpp::Parser::Expressions::ExprVariant& expr);
+                         const Loxpp::Parser::Expressions::Expr& expr);
 // << Token
 std::ostream& operator<<(std::ostream& stream,
                          const Loxpp::Lexer::Token& token);
