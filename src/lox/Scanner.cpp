@@ -11,7 +11,7 @@ namespace Loxpp::Lexer {
 
 Scanner::Scanner(std::string source) : m_source(source) {}
 
-const std::vector<std::unique_ptr<Token>>& Scanner::ScanTokens() {
+std::vector<std::unique_ptr<Token>> Scanner::ScanTokens() {
     while (!IsAtEnd()) {
         // Beginning of next lexeme
         m_start = m_current;
@@ -20,7 +20,8 @@ const std::vector<std::unique_ptr<Token>>& Scanner::ScanTokens() {
 
     m_tokens.push_back(
         std::make_unique<Token>(TokenType::END, "", std::nullopt, m_line));
-    return m_tokens;
+    // todo:
+    return std::move(m_tokens);
 }
 
 #pragma endregion

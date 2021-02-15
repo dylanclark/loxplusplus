@@ -3,18 +3,6 @@
 #include <Tokens.h>
 
 namespace Loxpp::Lexer {
-
-namespace Literals {
-constexpr auto Space{" "};
-constexpr auto TokenName{"Token"};
-constexpr auto Colon{":"};
-constexpr auto OpenBracket{"{"};
-constexpr auto CloseBracket{"}"};
-constexpr auto Type{"Type"};
-constexpr auto Lex{"Lex"};
-constexpr auto Literal{"Literal"};
-constexpr auto Tab{"\t"};
-} // namespace Literals
 #pragma region Public methods
 
 // Constructor
@@ -26,25 +14,6 @@ Token::Token(TokenType type, std::string lexeme,
 Token::Token(const Token& other)
     : m_type(other.GetType()), m_lexeme(other.GetLexeme()),
       m_literal(other.GetLiteral()), m_line(other.GetLine()) {}
-
-std::ostream& operator<<(std::ostream& stream, const Token& token) {
-    using namespace Literals;
-    // Opening : "Token { "
-    stream << TokenName << Space << OpenBracket << Space;
-    // Type and lexeme " Type: <type>\tLexeme: <lexeme>\t"
-    stream << Type << Colon << Space << ToString(token.GetType()) << Tab << Lex
-           << Colon << Space << token.GetLexeme() << Tab;
-    // Literal value if present
-    if (token.GetLiteral().has_value()) {
-        stream << Literal << Colon << Space;
-        std::visit([&stream](const auto& variant) { stream << variant; },
-                   token.GetLiteral().value());
-        stream << Tab;
-    }
-    // Closing
-    stream << CloseBracket << std::endl;
-    return stream;
-}
 
 #pragma endregion
 

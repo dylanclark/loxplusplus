@@ -1,7 +1,6 @@
 #pragma once
 
 #include <Uncopyable.h>
-
 #include <iostream>
 #include <optional>
 #include <string>
@@ -63,7 +62,7 @@ enum class TokenType {
 const std::unordered_map<std::string, TokenType>& GetReservedKeywords();
 std::string ToString(TokenType type);
 
-using LiteralValue = std::variant<std::string, double, bool, std::nullptr_t>;
+using LiteralValue = std::variant<std::string, double, bool, std::monostate>;
 
 class Token {
   public:
@@ -81,8 +80,6 @@ class Token {
     const std::string& GetLexeme() const { return m_lexeme; }
     const std::optional<LiteralValue>& GetLiteral() const { return m_literal; }
     int GetLine() const { return m_line; }
-
-    friend std::ostream& operator<<(std::ostream& os, const Token& token);
 
   private:
     const TokenType m_type;

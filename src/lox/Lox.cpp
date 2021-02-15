@@ -3,8 +3,10 @@
 #include <Error.h>
 #include <Lox.h>
 #include <Parser.h>
+#include <Print.h>
 #include <Scanner.h>
 #include <Tokens.h>
+
 
 namespace Loxpp {
 
@@ -52,20 +54,20 @@ void Lox::RunPrompt() {
 
 void Lox::Run(std::string source) {
     Scanner scanner{source};
-    std::vector<std::unique_ptr<Token>> tokens;
     try {
-        const std::vector<std::unique_ptr<Token>>& tokens{scanner.ScanTokens()};
+        std::vector<std::unique_ptr<Token>> tokens{scanner.ScanTokens()};
         for (const auto& token : tokens) {
             std::cout << *token;
         }
         std::cout << std::endl;
+
+        Parser::Parser parser{std::move(tokens)};
+        Parser::Expressions::ExprVariant expr{parser.Parse()};
+        std::cout << expr;
     } catch (const Error::SyntaxError& e) {
         m_hadError = true;
         std::cout << e.what() << std::endl;
     }
-
-    Parser::Parser parser{std::move(tokens)};
-    Parser::Expressions::ExprVariant expr{parser.Parse()};
 }
 
 void Lox::Error(int /*line*/, std::string /*message*/) { m_hadError = true; }

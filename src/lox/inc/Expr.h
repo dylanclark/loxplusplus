@@ -3,9 +3,27 @@
 #include "Tokens.h"
 
 #include <memory>
+#include <type_traits>
+#include <variant>
 
 namespace Loxpp::Parser::Expressions {
 
+/* Define the types of nodes in the AST and the fields associated with each
+node. Defining a name and it's types results in creation of a POD struct that
+consumes its arguments and a factory function to make an instance of the
+ExprVariant type. Example follows:
+
+DefineExprOneField(ExampleExpression, string, foo) ->
+
+struct ExampleExpression {
+    string foo;
+    ExampleExpression(string foo) : foo(std::move(foo)) {}
+};
+
+intline ExprVariant MakeExampleExpression(string&& foo) {
+    return std::make_unique<ExampleExpression>(std::move(foo));
+}
+*/
 #define DefineExprOneField(NAME, FIELD1_TYPE, FIELD1_NAME)                     \
     struct NAME {                                                              \
         FIELD1_TYPE FIELD1_NAME;                                               \
@@ -50,18 +68,23 @@ namespace Loxpp::Parser::Expressions {
                                       std::move(FIELD3_NAME));                 \
     }
 
+// Forward declare expression types
 struct BinaryExpr;
 struct GroupingExpr;
 struct LiteralExpr;
 struct UnaryExpr;
 
+// As ptrs
 using BinaryExprPtr = std::unique_ptr<BinaryExpr>;
 using GroupingExprPtr = std::unique_ptr<GroupingExpr>;
 using LiteralExprPtr = std::unique_ptr<LiteralExpr>;
 using UnaryExprPtr = std::unique_ptr<UnaryExpr>;
 
+// Main expression
 using ExprVariant =
     std::variant<BinaryExprPtr, GroupingExprPtr, LiteralExprPtr, UnaryExprPtr>;
+
+/* Define the structs */
 
 // BinaryExpr : ExprPtr left, Token op, ExprPtr right
 DefineExprThreeFields(BinaryExpr, ExprVariant, left, Lexer::TokenPtr, op,

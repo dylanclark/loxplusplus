@@ -4,6 +4,7 @@ set(SOURCES
     Error.cpp
     Lox.cpp
     Parser.cpp
+    Print.cpp
     Scanner.cpp
     Tokens.cpp
 )

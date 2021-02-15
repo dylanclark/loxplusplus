@@ -14,7 +14,7 @@ ExprVariant Parser::Parse() {
     try {
         return Expression();
     } catch (const Error::SyntaxError& e) {
-        return MakeLiteralExpr(nullptr);
+        return MakeLiteralExpr(std::monostate());
     }
 }
 
@@ -96,7 +96,7 @@ ExprVariant Parser::Primary() {
         return MakeLiteralExpr(true);
     }
     if (Match({TokenType::NIL})) {
-        return MakeLiteralExpr(nullptr);
+        return MakeLiteralExpr(std::monostate());
     }
     if (Match({TokenType::NUMBER, TokenType::STRING})) {
         auto val{Previous()->GetLiteral().value()};

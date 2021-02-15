@@ -15,7 +15,7 @@ class Scanner : public Uncopyable {
   public:
     Scanner(std::string source);
 
-    const std::vector<std::unique_ptr<Token>>& ScanTokens();
+    std::vector<std::unique_ptr<Token>> ScanTokens();
 
   private:
     void ScanToken();
