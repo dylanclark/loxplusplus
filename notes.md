@@ -82,3 +82,26 @@ primary        → NUMBER | STRING | "true" | "false" | "nil"
 - Visitor pattern for matching types and recursively evaluating
 - functional approach to binary ops
 - opportunity to templatize it and make it even smaller
+
+## Chapter 8
+
+- Introducing statements, our grammar expands to:
+
+```
+program        → statement* EOF ; (new)
+statement      → exprStmt
+               | printStmt ; (new) 
+exprStmt       → expression ";" ; (new)
+printStmt      → "print" expression ";" ; (new)
+expression     → equality ;
+equality       → comparison ( ( "!=" | "==" ) comparison )* ;
+comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+term           → factor ( ( "-" | "+" ) factor )* ;
+factor         → unary ( ( "/" | "*" ) unary )* ;
+unary          → ( "!" | "-" ) unary
+               | primary ;
+primary        → NUMBER | STRING | "true" | "false" | "nil"
+               | "(" expression ")" ;
+```
+
+- Expressions and statements are disjoint so we impl separately
