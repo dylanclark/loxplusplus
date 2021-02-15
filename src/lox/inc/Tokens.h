@@ -59,11 +59,21 @@ enum class TokenType {
     END
 };
 
-const std::unordered_map<std::string, TokenType>& GetReservedKeywords();
+// String util for TokenType
 std::string ToString(TokenType type);
 
+// Accessor for a map that will contain all reserved keywords and their token
+// type
+const std::unordered_map<std::string, TokenType>& GetReservedKeywords();
+
+// Variant type is a union of our supported literals: string, double, bool, and
+// null
 using LiteralValue = std::variant<std::string, double, bool, std::monostate>;
 
+// A token represents a valid part of the Loxpp alphabet
+// It has a type, a lexeme (i.e. the textual representation of the token in src
+// code), and optionally a literal value We also keep track of line for use in
+// error messages
 class Token {
   public:
     Token(TokenType type, std::string lexeme,
@@ -88,6 +98,7 @@ class Token {
     const int m_line;
 };
 
+// Shorthand for a unique_ptr to a token
 using TokenPtr = std::unique_ptr<Lexer::Token>;
 
 } // namespace Loxpp::Lexer

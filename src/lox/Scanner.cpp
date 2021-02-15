@@ -9,6 +9,8 @@ namespace Loxpp::Lexer {
 
 #pragma region Public methods
 
+// Scanner implementation: Responsible for scanning source code and converting
+// it to a flat list of tokens where each token is part of the lexical alphabet
 Scanner::Scanner(std::string source) : m_source(source) {}
 
 std::vector<std::unique_ptr<Token>> Scanner::ScanTokens() {
@@ -226,5 +228,6 @@ bool Scanner::IsAlpha(char c) {
 }
 
 bool Scanner::IsAlphaNumeric(char c) { return IsAlpha(c) || IsDigit(c); }
+
 #pragma endregion
 } // namespace Loxpp::Lexer

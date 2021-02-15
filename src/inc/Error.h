@@ -7,6 +7,7 @@
 
 namespace Loxpp::Error {
 
+// Represents a user exception - i.e. trying to run a file that doesn't exist
 class UsageException : public std::exception {
   public:
     enum class Type {
@@ -30,6 +31,7 @@ class UsageException : public std::exception {
     std::string m_message;
 };
 
+// Represents a syntax error described by `message` in `where` of line `line`
 class SyntaxError : public std::exception {
   public:
     SyntaxError(int line, std::string where, std::string message);

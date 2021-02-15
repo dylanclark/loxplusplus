@@ -3,18 +3,22 @@
 
 #include <iostream>
 
-// explicit deduction guide (not needed as of C++20)
+// This file contains declarations of the `<<` overloads for various types we'd
+// like to pretty-print when debugging
+
+// explicit deduction guide - useful for helping implement pattern-matching like
+// pattern with variant types
 template <class... Ts> struct overloaded : Ts... {
     using Ts::operator()...;
 };                                                             // (1)
 template <class... Ts> overloaded(Ts...) -> overloaded<Ts...>; // (2)
 
-// ExprVariant
+// << ExprVariant
 std::ostream& operator<<(std::ostream& stream,
                          const Loxpp::Parser::Expressions::ExprVariant& expr);
-// Token
+// << Token
 std::ostream& operator<<(std::ostream& stream,
                          const Loxpp::Lexer::Token& token);
-// Literal
+// << LiteralValue
 std::ostream& operator<<(std::ostream& stream,
                          const Loxpp::Lexer::LiteralValue& value);

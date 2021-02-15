@@ -7,7 +7,22 @@ namespace Loxpp::Parser {
 
 using namespace Expressions;
 using namespace Lexer;
+/*
 
+Parser implementation: Reponsible for parsing a flat list of tokens into an
+expression tree conforming to the languages grammar. Grammar is described here
+in BNF:
+
+expression     → equality ;
+equality       → comparison ( ( "!=" | "==" ) comparison )* ;
+comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
+term           → factor ( ( "-" | "+" ) factor )* ;
+factor         → unary ( ( "/" | "*" ) unary )* ;
+unary          → ( "!" | "-" ) unary
+               | primary ;
+primary        → NUMBER | STRING | "true" | "false" | "nil"
+               | "(" expression ")" ;
+*/
 Parser::Parser(std::vector<TokenPtr>&& tokens) : m_tokens(std::move(tokens)) {}
 
 ExprVariant Parser::Parse() {
@@ -88,6 +103,7 @@ ExprVariant Parser::Unary() {
     return Primary();
 }
 
+// primary    → NUMBER | STRING | "true" | "false" | "nil" | "(" expression")" ;
 ExprVariant Parser::Primary() {
     if (Match({TokenType::FALSE})) {
         return MakeLiteralExpr(false);
@@ -145,6 +161,8 @@ const TokenPtr& Parser::Peek() const { return m_tokens.at(m_current); }
 
 const TokenPtr& Parser::Previous() { return m_tokens.at(m_current - 1); }
 
+// If next token is of type `type`, consume it and advance
+// Otherwise throw an error
 const TokenPtr& Parser::Consume(TokenType type, std::string message) {
     if (Check(type)) {
         return Advance();

@@ -30,7 +30,7 @@ const char* SyntaxError::what() const noexcept { return m_message.c_str(); }
 /*static*/ std::string SyntaxError::BuildMessage(int line, std::string where,
                                                  std::string message) {
     std::ostringstream stream;
-    stream << "[line " << line << " ] Error " << where << ": " << message;
+    stream << "[line " << line << "] Error " << where << ": " << message;
     return stream.str();
 }
 

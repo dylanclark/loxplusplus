@@ -1,6 +1,9 @@
 #pragma once
 
 namespace Loxpp {
+
+// Classes an inherit from Uncopyable to automatically delete their copy/move
+// constructors/assignment operators
 struct Uncopyable {
     explicit Uncopyable() = default;
     virtual ~Uncopyable() = default;

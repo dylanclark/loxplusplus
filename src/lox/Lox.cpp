@@ -16,6 +16,11 @@ static constexpr auto Prompt{">> "sv};
 
 using namespace Lexer;
 
+// Implementation of the ILox interface for the lox-core library
+// This is the main entry point to the application - we start by either running
+// a file or running a REPL `Run` consists of scanning the source coe into
+// tokens, parsing the tokens into an expression tree, and [TODO: right now we
+// just print them]
 class Lox : public ILox {
   public:
     virtual void RunFile(std::string filePath) override;

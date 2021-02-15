@@ -11,6 +11,7 @@
 
 namespace Loxpp::Lexer {
 
+// Scanner class transforms a source string into a flat sequence of Tokens
 class Scanner : public Uncopyable {
   public:
     Scanner(std::string source);

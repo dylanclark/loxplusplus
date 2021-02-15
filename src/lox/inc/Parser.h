@@ -8,6 +8,8 @@
 
 namespace Loxpp::Parser {
 
+// Parser is a class responsible for turning sequential tokens into an
+// expression tree (AST)
 class Parser {
   public:
     Parser(std::vector<Lexer::TokenPtr>&& tokens);
