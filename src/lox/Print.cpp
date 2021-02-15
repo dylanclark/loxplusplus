@@ -23,32 +23,30 @@ constexpr auto Tab{"\t"};
 
 void Parenthesize(std::ostream& stream, const std::string& name,
                   const ExprVariant& expr) {
-    stream << "(" << name;
-    // for (const ExprVariant& expr : exprs) {
-    stream << " " << expr;
-    //   }
-    stream << ")";
+    stream << "(" << name << " " << expr << ")";
 }
 
+void Parenthesize(std::ostream& stream, const std::string& name,
+                  const ExprVariant& exprOne, const ExprVariant& exprTwo) {
+    stream << "(" << name << " " << exprOne << " " << exprTwo << ")";
+}
 std::ostream& operator<<(std::ostream& stream, const ExprVariant& expr) {
     using namespace Lexer;
     std::visit(
         overloaded{// Define << overload for each type of the variant here
                    [&stream](const BinaryExprPtr& binaryExpr) {
-                       // Parenthesize(stream, binaryExpr->op->GetLexeme(),
-                       //              {binaryExpr->left, binaryExpr->right});
+                       Parenthesize(stream, binaryExpr->op->GetLexeme(),
+                                    binaryExpr->left, binaryExpr->right);
                    },
                    [&stream](const GroupingExprPtr& groupingExpr) {
-                       Parenthesize(stream, "group",
-                                    {groupingExpr->expression});
+                       Parenthesize(stream, "group", groupingExpr->expression);
                    },
                    [&stream](const LiteralExprPtr& literalExpr) {
-                       const LiteralValue& v{literalExpr->value};
-                       stream << v;
+                       stream << literalExpr->value;
                    },
                    [&stream](const UnaryExprPtr& unaryExpr) {
                        Parenthesize(stream, unaryExpr->op->GetLexeme(),
-                                    {unaryExpr->right});
+                                    unaryExpr->right);
                    }},
         expr);
     return stream;
