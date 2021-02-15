@@ -9,10 +9,8 @@ namespace Loxpp::Parser::Expressions {
 #define DefineExprOneField(NAME, FIELD1_TYPE, FIELD1_NAME)                     \
     struct NAME {                                                              \
         FIELD1_TYPE FIELD1_NAME;                                               \
-        NAME(FIELD1_TYPE FIELD1_NAME);                                         \
+        NAME(FIELD1_TYPE FIELD1_NAME) : FIELD1_NAME(std::move(FIELD1_NAME)) {} \
     };                                                                         \
-    NAME::NAME(FIELD1_TYPE FIELD1_NAME)                                        \
-        : FIELD1_NAME(std::move(FIELD1_NAME)) {}                               \
     inline ExprVariant Make##NAME(FIELD1_TYPE&& FIELD1_NAME) {                 \
         return std::make_unique<NAME>(std::move(FIELD1_NAME));                 \
     }
@@ -22,11 +20,10 @@ namespace Loxpp::Parser::Expressions {
     struct NAME {                                                              \
         FIELD1_TYPE FIELD1_NAME;                                               \
         FIELD2_TYPE FIELD2_NAME;                                               \
-        NAME(FIELD1_TYPE FIELD1_NAME, FIELD2_TYPE FIELD2_NAME);                \
+        NAME(FIELD1_TYPE FIELD1_NAME, FIELD2_TYPE FIELD2_NAME)                 \
+            : FIELD1_NAME(std::move(FIELD1_NAME)),                             \
+              FIELD2_NAME(std::move(FIELD2_NAME)) {}                           \
     };                                                                         \
-    NAME::NAME(FIELD1_TYPE FIELD1_NAME, FIELD2_TYPE FIELD2_NAME)               \
-        : FIELD1_NAME(std::move(FIELD1_NAME)),                                 \
-          FIELD2_NAME(std::move(FIELD2_NAME)) {}                               \
     inline ExprVariant Make##NAME(FIELD1_TYPE&& FIELD1_NAME,                   \
                                   FIELD2_TYPE&& FIELD2_NAME) {                 \
         return std::make_unique<NAME>(std::move(FIELD1_NAME),                  \
@@ -40,13 +37,11 @@ namespace Loxpp::Parser::Expressions {
         FIELD2_TYPE FIELD2_NAME;                                               \
         FIELD3_TYPE FIELD3_NAME;                                               \
         NAME(FIELD1_TYPE FIELD1_NAME, FIELD2_TYPE FIELD2_NAME,                 \
-             FIELD3_TYPE FIELD3_NAME);                                         \
+             FIELD3_TYPE FIELD3_NAME)                                          \
+            : FIELD1_NAME(std::move(FIELD1_NAME)),                             \
+              FIELD2_NAME(std::move(FIELD2_NAME)),                             \
+              FIELD3_NAME(std::move(FIELD3_NAME)) {}                           \
     };                                                                         \
-    NAME::NAME(FIELD1_TYPE FIELD1_NAME, FIELD2_TYPE FIELD2_NAME,               \
-               FIELD3_TYPE FIELD3_NAME)                                        \
-        : FIELD1_NAME(std::move(FIELD1_NAME)),                                 \
-          FIELD2_NAME(std::move(FIELD2_NAME)),                                 \
-          FIELD3_NAME(std::move(FIELD3_NAME)) {}                               \
     inline ExprVariant Make##NAME(FIELD1_TYPE&& FIELD1_NAME,                   \
                                   FIELD2_TYPE&& FIELD2_NAME,                   \
                                   FIELD3_TYPE&& FIELD3_NAME) {                 \
