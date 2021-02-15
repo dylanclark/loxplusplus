@@ -8,7 +8,7 @@
 
 // << Expr
 std::ostream& operator<<(std::ostream& stream,
-                         const Loxpp::Parser::Expressions::Expr& expr);
+                         const Loxpp::Expressions::Expr& expr);
 // << Token
 std::ostream& operator<<(std::ostream& stream,
                          const Loxpp::Lexer::Token& token);

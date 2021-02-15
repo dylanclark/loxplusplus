@@ -2,6 +2,13 @@
 
 #include <Expr.h>
 
-namespace Loxpp {
-void Eval(const Parser::Expressions::Expr& expr);
-}
+namespace Loxpp::Expressions {
+
+class Evaluator {
+  public:
+    Evaluator();
+
+    void Eval(const Expr& expr);
+};
+
+} // namespace Loxpp::Expressions

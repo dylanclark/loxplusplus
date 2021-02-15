@@ -7,8 +7,7 @@
 
 using namespace Loxpp;
 using namespace Loxpp::Lexer;
-using namespace Loxpp::Parser;
-using namespace Loxpp::Parser::Expressions;
+using namespace Loxpp::Expressions;
 
 namespace Literals {
 constexpr auto Space{" "};

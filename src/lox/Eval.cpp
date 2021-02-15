@@ -3,10 +3,11 @@
 #include <Eval.h>
 #include <VisitHelpers.h>
 
-namespace Loxpp {
-using namespace Parser::Expressions;
+namespace Loxpp::Expressions {
 
-void Eval(const Expr& expr) {
+Evaluator::Evaluator() = default;
+
+void Evaluator::Eval(const Expr& expr) {
     std::visit(
         overloaded{// Define << overload for each type of the variant here
                    [](const BinaryExprPtr& binaryExpr) {},
@@ -15,4 +16,4 @@ void Eval(const Expr& expr) {
                    [](const UnaryExprPtr& unaryExpr) {}},
         expr);
 }
-} // namespace Loxpp
+} // namespace Loxpp::Expressions

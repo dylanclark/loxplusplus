@@ -6,7 +6,7 @@
 #include <type_traits>
 #include <variant>
 // TODO: better namespace
-namespace Loxpp::Parser::Expressions {
+namespace Loxpp::Expressions {
 
 /* Define the types of nodes in the AST and the fields associated with each
 node. Defining a name and it's types results in creation of a POD struct that
@@ -98,4 +98,4 @@ DefineExprOneField(LiteralExpr, Lexer::LiteralValue, value);
 // UnaryExpr : Token op, ExprPtr right
 DefineExprTwoFields(UnaryExpr, Lexer::TokenPtr, op, Expr, right);
 
-} // namespace Loxpp::Parser::Expressions
+} // namespace Loxpp::Expressions
