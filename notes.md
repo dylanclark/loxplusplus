@@ -43,7 +43,8 @@ binary         → expression operator expression ;
 operator       → "==" | "!=" | "<" | "<=" | ">" | ">="
                | "+"  | "-"  | "*" | "/" ;
 ```
-
+- skip impl of astprinter, as we need to build the tree first ...
+- 
 ## Chapter 3
 
 - We need well-defined precedence nd associativity to avoid amiguity. Without it, `6 / 3 - 1` could evaluate to `(6/3) - 1 = 1` or `6 / (3 - 1) = 3`.
@@ -72,4 +73,5 @@ primary        → NUMBER | STRING | "true" | "false" | "nil"
 ```
 
 - Parsing technique of choise is "recursive descent". It is a top-down parsing technique that literally translates the grammar's rules into imperitive code. Each rule is a function.
-- 
+- notes on variant impl and codegen
+- overloadeding << for types for printing 
