@@ -9,22 +9,22 @@
 #include <utility>
 #include <vector>
 
-namespace Loxpp::Expressions {
+namespace Loxpp::Interpreter {
 
-class Evaluator {
+class Interpreter {
   public:
-    Evaluator();
+    Interpreter();
 
     void Interpret(const std::vector<Statements::Stmt>& statements);
 
   private:
     void Execute(const Statements::Stmt& stmt);
 
-    Object::LoxObj Eval(const Expr& expr);
-    Object::LoxObj Eval(const BinaryExprPtr& expr);
-    Object::LoxObj Eval(const GroupingExprPtr& expr);
-    Object::LoxObj Eval(const LiteralExprPtr& expr);
-    Object::LoxObj Eval(const UnaryExprPtr& expr);
+    Object::LoxObj Eval(const Expressions::Expr& expr);
+    Object::LoxObj Eval(const Expressions::BinaryExprPtr& expr);
+    Object::LoxObj Eval(const Expressions::GroupingExprPtr& expr);
+    Object::LoxObj Eval(const Expressions::LiteralExprPtr& expr);
+    Object::LoxObj Eval(const Expressions::UnaryExprPtr& expr);
 
     static bool IsEqual(const Object::LoxObj& objLeft,
                         const Object::LoxObj& objRight);
@@ -48,4 +48,4 @@ class Evaluator {
                         const Object::LoxObj& objRight);
 };
 
-} // namespace Loxpp::Expressions
+} // namespace Loxpp::Interpreter

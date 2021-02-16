@@ -1,19 +1,20 @@
 #include <loxpp_pch.h>
 
-#include <Eval.h>
+#include <Interpreter.h>
 #include <Print.h>
 #include <VisitHelpers.h>
 #include <_Error.h>
 
-namespace Loxpp::Expressions {
+namespace Loxpp::Interpreter {
 
+using namespace Expressions;
 using namespace Object;
 using namespace Lexer;
 using namespace Statements;
 
-Evaluator::Evaluator() = default;
+Interpreter::Interpreter() = default;
 
-void Evaluator::Interpret(const std::vector<Stmt>& statements) {
+void Interpreter::Interpret(const std::vector<Stmt>& statements) {
     try {
         for (const auto& stmt : statements) {
             Execute(stmt);
@@ -29,7 +30,7 @@ void Evaluator::Interpret(const std::vector<Stmt>& statements) {
     }
 }
 
-void Evaluator::Execute(const Stmt& stmt) {
+void Interpreter::Execute(const Stmt& stmt) {
     return std::visit(overloaded{[this](const PrintStmtPtr& printStmt) {
 
                                  },
@@ -39,7 +40,7 @@ void Evaluator::Execute(const Stmt& stmt) {
                       stmt);
 }
 
-LoxObj Evaluator::Eval(const Expr& expr) {
+LoxObj Interpreter::Eval(const Expr& expr) {
     return std::visit(
         overloaded{
             // Define Eval overload for each type of the variant here
@@ -56,7 +57,7 @@ LoxObj Evaluator::Eval(const Expr& expr) {
         expr);
 }
 
-LoxObj Evaluator::Eval(const BinaryExprPtr& expr) {
+LoxObj Interpreter::Eval(const BinaryExprPtr& expr) {
     LoxObj leftObj{Eval(expr->left)};
     LoxObj rightObj{Eval(expr->right)};
 
@@ -119,15 +120,15 @@ LoxObj Evaluator::Eval(const BinaryExprPtr& expr) {
     throw Error::RuntimeError(expr->op, "Unexpected operator.");
 }
 
-LoxObj Evaluator::Eval(const GroupingExprPtr& expr) {
+LoxObj Interpreter::Eval(const GroupingExprPtr& expr) {
     return Eval(expr->expression);
 }
 
-LoxObj Evaluator::Eval(const LiteralExprPtr& expr) {
+LoxObj Interpreter::Eval(const LiteralExprPtr& expr) {
     return FromLiteralValue(expr->value);
 }
 
-LoxObj Evaluator::Eval(const UnaryExprPtr& expr) {
+LoxObj Interpreter::Eval(const UnaryExprPtr& expr) {
     LoxObj right{Eval(expr->right)};
 
     switch (expr->op->GetType()) {
@@ -143,12 +144,12 @@ LoxObj Evaluator::Eval(const UnaryExprPtr& expr) {
     return LoxObj{};
 }
 
-bool Evaluator::IsEqual(const Object::LoxObj& objLeft,
-                        const Object::LoxObj& objRight) {
+bool Interpreter::IsEqual(const Object::LoxObj& objLeft,
+                          const Object::LoxObj& objRight) {
     return objLeft == objRight;
 }
 
-double Evaluator::PerformArithmeticOperation(
+double Interpreter::PerformArithmeticOperation(
     const Lexer::TokenPtr& op, const Object::LoxObj& objLeft,
     const Object::LoxObj& objRight,
     std::function<double(double, double)> func) {
@@ -156,14 +157,14 @@ double Evaluator::PerformArithmeticOperation(
     return func(left, right);
 }
 
-bool Evaluator::PerformLogicalOperation(
+bool Interpreter::PerformLogicalOperation(
     const Lexer::TokenPtr& op, const Object::LoxObj& objLeft,
     const Object::LoxObj& objRight, std::function<bool(double, double)> func) {
     const auto [left, right]{CheckNumberOperands(op, objLeft, objRight)};
     return func(left, right);
 }
 
-double Evaluator::CheckNumberOperand(const TokenPtr& op, const LoxObj& obj) {
+double Interpreter::CheckNumberOperand(const TokenPtr& op, const LoxObj& obj) {
     const double* d{std::get_if<double>(&obj)};
     if (d == nullptr) {
         throw Error::RuntimeError(op, "Operand must be a number.");
@@ -172,9 +173,9 @@ double Evaluator::CheckNumberOperand(const TokenPtr& op, const LoxObj& obj) {
 }
 
 std::pair<double, double>
-Evaluator::CheckNumberOperands(const Lexer::TokenPtr& op,
-                               const Object::LoxObj& objLeft,
-                               const Object::LoxObj& objRight) {
+Interpreter::CheckNumberOperands(const Lexer::TokenPtr& op,
+                                 const Object::LoxObj& objLeft,
+                                 const Object::LoxObj& objRight) {
     const double* left{std::get_if<double>(&objLeft)};
     const double* right{std::get_if<double>(&objRight)};
 
@@ -184,4 +185,4 @@ Evaluator::CheckNumberOperands(const Lexer::TokenPtr& op,
     return std::make_pair(*left, *right);
 }
 
-} // namespace Loxpp::Expressions
+} // namespace Loxpp::Interpreter

@@ -1,6 +1,6 @@
 #include <loxpp_pch.h>
 
-#include <Eval.h>
+#include <Interpreter.h>
 #include <Lox.h>
 #include <Parser.h>
 #include <Print.h>
@@ -65,7 +65,7 @@ void Lox::Run(std::string&& source) {
         Parser::Parser parser{std::move(tokens)};
         std::vector<Statements::Stmt> statements{parser.Parse()};
 
-        //        Expressions::Evaluator interpreter{};
+        //        Expressions::Interpreter interpreter{};
         //        interpreter.Evaluate(expr);
 
     } catch (const Error::SyntaxError& e) {
