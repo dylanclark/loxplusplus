@@ -2,10 +2,12 @@
 
 #include <Expr.h>
 #include <Object.h>
+#include <Stmt.h>
 #include <Tokens.h>
 
 #include <functional>
 #include <utility>
+#include <vector>
 
 namespace Loxpp::Expressions {
 
@@ -13,9 +15,11 @@ class Evaluator {
   public:
     Evaluator();
 
-    void Evaluate(const Expr& expr);
+    void Interpret(const std::vector<Statements::Stmt>& statements);
 
   private:
+    void Execute(const Statements::Stmt& stmt);
+
     Object::LoxObj Eval(const Expr& expr);
     Object::LoxObj Eval(const BinaryExprPtr& expr);
     Object::LoxObj Eval(const GroupingExprPtr& expr);

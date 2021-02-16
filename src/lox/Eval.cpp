@@ -9,20 +9,34 @@ namespace Loxpp::Expressions {
 
 using namespace Object;
 using namespace Lexer;
+using namespace Statements;
 
 Evaluator::Evaluator() = default;
 
-void Evaluator::Evaluate(const Expr& expr) {
+void Evaluator::Interpret(const std::vector<Stmt>& statements) {
     try {
-        LoxObj result{Eval(expr)};
-        std::cout << "\nResult:\n" << result << std::endl;
+        for (const auto& stmt : statements) {
+            Execute(stmt);
+        }
+        //    LoxObj result{Eval(expr)};
+        //   std::cout << "\nResult:\n" << result << std::endl;
     } catch (const Error::RuntimeError& e) {
         // todo: error reporter
         std::cout << e.what() << std::endl;
     } catch (const std::exception& e) {
-        std::cout << "FATAL ERROR, TERMINATING: " << e.what();
+        std::cout << "FATAL ERROR! TERMINATING: " << e.what();
         throw e;
     }
+}
+
+void Evaluator::Execute(const Stmt& stmt) {
+    return std::visit(overloaded{[this](const PrintStmtPtr& printStmt) {
+
+                                 },
+                                 [this](const ExpressionStmtPtr& exprStmt) {
+
+                                 }},
+                      stmt);
 }
 
 LoxObj Evaluator::Eval(const Expr& expr) {

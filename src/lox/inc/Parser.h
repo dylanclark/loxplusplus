@@ -26,6 +26,10 @@ class Parser {
     Expressions::Expr Unary();
     Expressions::Expr Primary();
 
+    Statements::Stmt Statement();
+    Statements::Stmt PrintStatement();
+    Statements::Stmt ExpressionStatement();
+
     bool Match(std::initializer_list<Lexer::TokenType> types);
     bool Check(Lexer::TokenType type);
     bool IsAtEnd() const;

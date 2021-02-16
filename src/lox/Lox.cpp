@@ -65,8 +65,6 @@ void Lox::Run(std::string&& source) {
         Parser::Parser parser{std::move(tokens)};
         std::vector<Statements::Stmt> statements{parser.Parse()};
 
-        //        std::cout << "AST:\n" << expr << std::endl;
-        //
         //        Expressions::Evaluator interpreter{};
         //        interpreter.Evaluate(expr);
 

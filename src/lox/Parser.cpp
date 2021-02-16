@@ -29,6 +29,9 @@ Parser::Parser(std::vector<TokenPtr>&& tokens) : m_tokens(std::move(tokens)) {}
 
 std::vector<Stmt> Parser::Parse() {
     std::vector<Stmt> statements;
+    while (!IsAtEnd()) {
+        statements.push_back(Statement());
+    }
     return statements;
     //    try {
     //        return Expression();
@@ -129,6 +132,25 @@ Expr Parser::Primary() {
     }
 
     throw Error(Peek(), "Expect expression.");
+}
+
+Stmt Parser::Statement() {
+    if (Match({TokenType::PRINT})) {
+        return PrintStatement();
+    }
+    return ExpressionStatement();
+}
+
+Stmt Parser::PrintStatement() {
+    Expr expr{Expression()};
+    Consume(TokenType::SEMICOLON, "Expect ';' after value.");
+    return MakePrintStmt(std::move(expr));
+}
+
+Stmt Parser::ExpressionStatement() {
+    Expr expr{Expression()};
+    Consume(TokenType::SEMICOLON, "Expect ';' after expression.");
+    return MakeExpressionStmt(std::move(expr));
 }
 
 // Check to see if current token has any of the given types
