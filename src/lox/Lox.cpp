@@ -5,6 +5,7 @@
 #include <Parser.h>
 #include <Print.h>
 #include <Scanner.h>
+#include <Stmt.h>
 #include <Tokens.h>
 #include <_Error.h>
 
@@ -62,12 +63,12 @@ void Lox::Run(std::string&& source) {
     try {
         std::vector<std::unique_ptr<Token>> tokens{scanner.ScanTokens()};
         Parser::Parser parser{std::move(tokens)};
-        Expressions::Expr expr{parser.Parse()};
+        std::vector<Statements::Stmt> statements{parser.Parse()};
 
-        std::cout << "AST:\n" << expr << std::endl;
-
-        Expressions::Evaluator interpreter{};
-        interpreter.Evaluate(expr);
+        //        std::cout << "AST:\n" << expr << std::endl;
+        //
+        //        Expressions::Evaluator interpreter{};
+        //        interpreter.Evaluate(expr);
 
     } catch (const Error::SyntaxError& e) {
         m_hadError = true;

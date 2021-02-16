@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Expr.h"
+#include "Stmt.h"
 #include "Tokens.h"
 #include "_Error.h"
 
@@ -14,7 +15,7 @@ namespace Loxpp::Parser {
 class Parser {
   public:
     Parser(std::vector<Lexer::TokenPtr>&& tokens);
-    Expressions::Expr Parse();
+    std::vector<Statements::Stmt> Parse();
 
   private:
     Expressions::Expr Expression();

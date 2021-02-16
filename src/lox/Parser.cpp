@@ -3,11 +3,12 @@
 #include <Parser.h>
 #include <_Error.h>
 
-
 namespace Loxpp::Parser {
 
 using namespace Expressions;
 using namespace Lexer;
+using namespace Statements;
+
 /*
 
 Parser implementation: Reponsible for parsing a flat list of tokens into an
@@ -26,12 +27,14 @@ primary        → NUMBER | STRING | "true" | "false" | "nil"
 */
 Parser::Parser(std::vector<TokenPtr>&& tokens) : m_tokens(std::move(tokens)) {}
 
-Expr Parser::Parse() {
-    try {
-        return Expression();
-    } catch (const Error::SyntaxError& e) {
-        return MakeLiteralExpr(std::monostate());
-    }
+std::vector<Stmt> Parser::Parse() {
+    std::vector<Stmt> statements;
+    return statements;
+    //    try {
+    //        return Expression();
+    //    } catch (const Error::SyntaxError& e) {
+    //        return MakeLiteralExpr(std::monostate());
+    //    }
 }
 
 // expression -> equality

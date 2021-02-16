@@ -24,9 +24,9 @@ using Stmt = std::variant<ExpressionStmtPtr, PrintStmtPtr>;
 /* Define the structs */
 
 // ExpressionStmt : Expr expression
-DefineWithOneField(ExpressionStmt, Expressions::Expr, expression);
+DefineWithOneField(Stmt, ExpressionStmt, Expressions::Expr, expression);
 
 // PrintStmt : Expr expression
-DefineWithOneField(PrintStmt, Expressions::Expr, expression);
+DefineWithOneField(Stmt, PrintStmt, Expressions::Expr, expression);
 
 } // namespace Loxpp::Statements

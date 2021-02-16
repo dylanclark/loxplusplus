@@ -14,16 +14,16 @@ intline Expr MakeExampleExpression(string&& foo) {
     return std::make_unique<ExampleExpression>(std::move(foo));
 }
 */
-#define DefineWithOneField(NAME, FIELD1_TYPE, FIELD1_NAME)                     \
+#define DefineWithOneField(TYPE, NAME, FIELD1_TYPE, FIELD1_NAME)               \
     struct NAME {                                                              \
         FIELD1_TYPE FIELD1_NAME;                                               \
         NAME(FIELD1_TYPE FIELD1_NAME) : FIELD1_NAME(std::move(FIELD1_NAME)) {} \
     };                                                                         \
-    inline Expr Make##NAME(FIELD1_TYPE&& FIELD1_NAME) {                        \
+    inline TYPE Make##NAME(FIELD1_TYPE&& FIELD1_NAME) {                        \
         return std::make_unique<NAME>(std::move(FIELD1_NAME));                 \
     }
 
-#define DefineWithTwoFields(NAME, FIELD1_TYPE, FIELD1_NAME, FIELD2_TYPE,       \
+#define DefineWithTwoFields(TYPE, NAME, FIELD1_TYPE, FIELD1_NAME, FIELD2_TYPE, \
                             FIELD2_NAME)                                       \
     struct NAME {                                                              \
         FIELD1_TYPE FIELD1_NAME;                                               \
@@ -32,14 +32,15 @@ intline Expr MakeExampleExpression(string&& foo) {
             : FIELD1_NAME(std::move(FIELD1_NAME)),                             \
               FIELD2_NAME(std::move(FIELD2_NAME)) {}                           \
     };                                                                         \
-    inline Expr Make##NAME(FIELD1_TYPE&& FIELD1_NAME,                          \
+    inline TYPE Make##NAME(FIELD1_TYPE&& FIELD1_NAME,                          \
                            FIELD2_TYPE&& FIELD2_NAME) {                        \
         return std::make_unique<NAME>(std::move(FIELD1_NAME),                  \
                                       std::move(FIELD2_NAME));                 \
     }
 
-#define DefineWithThreeFields(NAME, FIELD1_TYPE, FIELD1_NAME, FIELD2_TYPE,     \
-                              FIELD2_NAME, FIELD3_TYPE, FIELD3_NAME)           \
+#define DefineWithThreeFields(TYPE, NAME, FIELD1_TYPE, FIELD1_NAME,            \
+                              FIELD2_TYPE, FIELD2_NAME, FIELD3_TYPE,           \
+                              FIELD3_NAME)                                     \
     struct NAME {                                                              \
         FIELD1_TYPE FIELD1_NAME;                                               \
         FIELD2_TYPE FIELD2_NAME;                                               \
@@ -50,7 +51,7 @@ intline Expr MakeExampleExpression(string&& foo) {
               FIELD2_NAME(std::move(FIELD2_NAME)),                             \
               FIELD3_NAME(std::move(FIELD3_NAME)) {}                           \
     };                                                                         \
-    inline Expr Make##NAME(FIELD1_TYPE&& FIELD1_NAME,                          \
+    inline TYPE Make##NAME(FIELD1_TYPE&& FIELD1_NAME,                          \
                            FIELD2_TYPE&& FIELD2_NAME,                          \
                            FIELD3_TYPE&& FIELD3_NAME) {                        \
         return std::make_unique<NAME>(std::move(FIELD1_NAME),                  \

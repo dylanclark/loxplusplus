@@ -28,15 +28,16 @@ using Expr =
 /* Define the structs */
 
 // BinaryExpr : ExprPtr left, Token op, ExprPtr right
-DefineWithThreeFields(BinaryExpr, Expr, left, Lexer::TokenPtr, op, Expr, right);
+DefineWithThreeFields(Expr, BinaryExpr, Expr, left, Lexer::TokenPtr, op, Expr,
+                      right);
 
 // GroupingExpr : ExprPtr expression
-DefineWithOneField(GroupingExpr, Expr, expression);
+DefineWithOneField(Expr, GroupingExpr, Expr, expression);
 
 // LiteralExpr : LiteralValue value
-DefineWithOneField(LiteralExpr, Lexer::LiteralValue, value);
+DefineWithOneField(Expr, LiteralExpr, Lexer::LiteralValue, value);
 
 // UnaryExpr : Token op, ExprPtr right
-DefineWithTwoFields(UnaryExpr, Lexer::TokenPtr, op, Expr, right);
+DefineWithTwoFields(Expr, UnaryExpr, Lexer::TokenPtr, op, Expr, right);
 
 } // namespace Loxpp::Expressions
